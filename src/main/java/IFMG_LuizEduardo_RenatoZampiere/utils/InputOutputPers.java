@@ -8,7 +8,6 @@ public class InputOutputPers {
     private final Scanner scanner;
 
     public InputOutputPers(){
-        System.out.println("olha o construtor");
         scanner = new Scanner(System.in);
     }
 

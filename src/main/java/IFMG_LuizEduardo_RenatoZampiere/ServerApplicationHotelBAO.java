@@ -21,7 +21,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ServerApplicationHotelBAO {
 
     public static void main(String[] args){
-        SpringApplication.run(HotelBAOApplication.class, args);
+        SpringApplication.run(ServerApplicationHotelBAO.class, args);
     }
 
 
