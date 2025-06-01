@@ -3,20 +3,18 @@ package IFMG_LuizEduardo_RenatoZampiere.services;
 import IFMG_LuizEduardo_RenatoZampiere.dtos.ClientDTO;
 import IFMG_LuizEduardo_RenatoZampiere.entities.Client;
 import IFMG_LuizEduardo_RenatoZampiere.repository.ClientRepository;
+import IFMG_LuizEduardo_RenatoZampiere.repository.StaysRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-
-@Service
-public class ClientService {
+public class StaysService {
 
     @Autowired
-    private ClientRepository clientRepository;
+    private StaysRepository staysRepository;
 
     @Transactional(readOnly = true)
     public void findAll(){ // todo mudar dps o que faz
@@ -56,7 +54,7 @@ public class ClientService {
     @Transactional
     public void delete(Long id){
         if(!clientRepository.existsById(id)){
-           System.out.println("nem existe kkkkk"); // todo mudar dps
+            System.out.println("nem existe kkkkk"); // todo mudar dps
         }
 
         try {
@@ -65,8 +63,6 @@ public class ClientService {
             System.out.println("Bugou aq kkkkkk"); // todo mudar dps
         }
     }
-
-
 
 
 
