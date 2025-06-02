@@ -1,8 +1,7 @@
 package IFMG_LuizEduardo_RenatoZampiere.services;
 
-import IFMG_LuizEduardo_RenatoZampiere.dtos.ClientDTO;
-import IFMG_LuizEduardo_RenatoZampiere.entities.Client;
-import IFMG_LuizEduardo_RenatoZampiere.repository.ClientRepository;
+import IFMG_LuizEduardo_RenatoZampiere.dtos.StaysDTO;
+import IFMG_LuizEduardo_RenatoZampiere.model.entities.Stays;
 import IFMG_LuizEduardo_RenatoZampiere.repository.StaysRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ public class StaysService {
 
     @Transactional(readOnly = true)
     public void findAll(){ // todo mudar dps o que faz
-        List ret = clientRepository.findAll();
+        List ret = staysRepository.findAll();
         for (Object iten: ret){
             System.out.println(iten);
         }
@@ -31,21 +30,18 @@ public class StaysService {
     }
 
     @Transactional
-    public void insert(ClientDTO dto){
+    public void insert(StaysDTO dto){
         //String phone, String name, String userName, String passWor
-        Client client = new Client(dto.getPhone(), dto.getName(), dto.getUserName(), dto.getPassWord());
-        clientRepository.save(client);
+
+        staysRepository.save(new Stays()); // todo
     }
 
     @Transactional
-    public void update(Long id, ClientDTO dto){
+    public void update(Long id, StaysDTO dto){
 
-        try {
-            Client client = clientRepository.getReferenceById(id);
-            client.setName(dto.getName());
-            client.setPhone(dto.getPhone());
-            client.setPassWord(dto.getPassWord());
-            client.setUserName(dto.getUserName());
+        try {//todo setar statys values
+            Stays stays = staysRepository.getReferenceById(id);
+
         } catch (EntityNotFoundException e){
             System.out.println("Achei não kkkkk"); // todo mudar dps
         }
@@ -53,18 +49,16 @@ public class StaysService {
 
     @Transactional
     public void delete(Long id){
-        if(!clientRepository.existsById(id)){
+        if(!staysRepository.existsById(id)){
             System.out.println("nem existe kkkkk"); // todo mudar dps
         }
 
         try {
-            clientRepository.deleteById(id);
+            staysRepository.deleteById(id);
         }catch (DataIntegrityViolationException e){
             System.out.println("Bugou aq kkkkkk"); // todo mudar dps
         }
     }
-
-
 
 
 }

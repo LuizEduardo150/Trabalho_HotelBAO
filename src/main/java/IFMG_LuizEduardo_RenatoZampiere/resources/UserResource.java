@@ -1,36 +1,31 @@
 package IFMG_LuizEduardo_RenatoZampiere.resources;
 
-import IFMG_LuizEduardo_RenatoZampiere.dtos.ClientDTO;
-import IFMG_LuizEduardo_RenatoZampiere.services.ClientService;
-import IFMG_LuizEduardo_RenatoZampiere.utils.InputOutputPers;
+import IFMG_LuizEduardo_RenatoZampiere.dtos.UserDTO;
+import IFMG_LuizEduardo_RenatoZampiere.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RequestMapping(value="/client")
 @RestController
-public class ClientResource {
+public class UserResource {
 
     @Autowired
-    private ClientService service;
+    private UserService service;
 
     @GetMapping
     public void findAll(){
-        System.out.println("olha um findall");
         service.findAll();
 
     }
 
     @PostMapping(produces = "application/json")
-    public void insert(@RequestBody ClientDTO dto){
-        System.out.println("insere, resource"); // todo remover dps
+    public void insert(@RequestBody UserDTO dto){
         service.insert(dto);
     }
 
 
     @PutMapping(value = {"/{id}"})
-    public void update(@PathVariable Long id, @RequestBody ClientDTO dto){
+    public void update(@PathVariable Long id, @RequestBody UserDTO dto){
         service.update(id, dto);
     }
 
@@ -38,4 +33,6 @@ public class ClientResource {
     public void delete(@PathVariable Long id){
         service.delete(id);
     }
+
+
 }

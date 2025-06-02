@@ -1,4 +1,4 @@
-package IFMG_LuizEduardo_RenatoZampiere.entities;
+package IFMG_LuizEduardo_RenatoZampiere.model.entities;
 
 import jakarta.persistence.*;
 
@@ -13,9 +13,9 @@ public class Stays {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "client_table") // todo conferir
-    private Long clientId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id") // todo conferir
+    private User userId;
 
 
     private Long roomId;
@@ -30,9 +30,9 @@ public class Stays {
 
     public Stays(){}
 
-    public Stays(Long id, Long clientId, Long roomId, LocalDate start, LocalDate end, LocalTime entryTime, LocalTime departureTime, Float totalCost) {
+    public Stays(Long id, User userId, Long roomId, LocalDate start, LocalDate end, LocalTime entryTime, LocalTime departureTime, Float totalCost) {
         this.id = id;
-        this.clientId = clientId;
+        this.userId = userId;
         this.roomId = roomId;
         this.start = start;
         this.end = end;
@@ -49,12 +49,12 @@ public class Stays {
         this.id = id;
     }
 
-    public Long getClientId() {
-        return clientId;
+    public User getUserId() {
+        return userId;
     }
 
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
+    public void setUserId(User userId) {
+        this.userId = userId;
     }
 
     public Long getRoomId() {

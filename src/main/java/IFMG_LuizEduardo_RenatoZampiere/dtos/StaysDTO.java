@@ -1,13 +1,13 @@
 package IFMG_LuizEduardo_RenatoZampiere.dtos;
 
-import IFMG_LuizEduardo_RenatoZampiere.entities.Stays;
+import IFMG_LuizEduardo_RenatoZampiere.model.entities.Stays;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class StaysDTO {
 
-    private Long clientId;
+    private Long userId;
     private Long roomId;
     private LocalDate start;
     private LocalDate end;
@@ -15,11 +15,10 @@ public class StaysDTO {
     private LocalTime departureTime;
     private Float totalCost;
 
-
     public StaysDTO(){}
 
-    public StaysDTO(Long clientId, Long roomId, LocalDate start, LocalDate end, LocalTime entryTime, LocalTime departureTime, Float totalCost) {
-        this.clientId = clientId;
+    public StaysDTO(Long userId, Long roomId, LocalDate start, LocalDate end, LocalTime entryTime, LocalTime departureTime, Float totalCost) {
+        this.userId = userId;
         this.roomId = roomId;
         this.start = start;
         this.end = end;
@@ -29,7 +28,7 @@ public class StaysDTO {
     }
 
     public StaysDTO(Stays stays) {
-        clientId = stays.getClientId();
+        userId = stays.getId();
         roomId = stays.getRoomId();
         start = stays.getStart();
         end = stays.getEnd();
@@ -39,12 +38,12 @@ public class StaysDTO {
     }
 
 
-    public Long getClientId() {
-        return clientId;
+    public Long getUserId() {
+        return userId;
     }
 
     public void setClientId(Long clientId) {
-        this.clientId = clientId;
+        this.userId = clientId;
     }
 
     public Long getRoomId() {

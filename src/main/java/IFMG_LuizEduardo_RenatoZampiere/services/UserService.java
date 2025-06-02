@@ -1,8 +1,8 @@
 package IFMG_LuizEduardo_RenatoZampiere.services;
 
-import IFMG_LuizEduardo_RenatoZampiere.dtos.ClientDTO;
-import IFMG_LuizEduardo_RenatoZampiere.entities.Client;
-import IFMG_LuizEduardo_RenatoZampiere.repository.ClientRepository;
+import IFMG_LuizEduardo_RenatoZampiere.dtos.UserDTO;
+import IFMG_LuizEduardo_RenatoZampiere.model.entities.User;
+import IFMG_LuizEduardo_RenatoZampiere.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -13,14 +13,14 @@ import java.util.List;
 
 
 @Service
-public class ClientService {
+public class UserService {
 
     @Autowired
-    private ClientRepository clientRepository;
+    private UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public void findAll(){ // todo mudar dps o que faz
-        List ret = clientRepository.findAll();
+        List ret = userRepository.findAll();
         for (Object iten: ret){
             System.out.println(iten);
         }
@@ -33,21 +33,27 @@ public class ClientService {
     }
 
     @Transactional
-    public void insert(ClientDTO dto){
-        //String phone, String name, String userName, String passWor
-        Client client = new Client(dto.getPhone(), dto.getName(), dto.getUserName(), dto.getPassWord());
-        clientRepository.save(client);
+    public void insert(UserDTO dto){
+        System.out.println("Um isert");
+        userRepository.save(new User(dto));
+        System.out.println("fim isnert");
     }
 
     @Transactional
-    public void update(Long id, ClientDTO dto){
+    public void update(Long id, UserDTO dto){
 
         try {
-            Client client = clientRepository.getReferenceById(id);
-            client.setName(dto.getName());
-            client.setPhone(dto.getPhone());
-            client.setPassWord(dto.getPassWord());
-            client.setUserName(dto.getUserName());
+            User user = userRepository.getReferenceById(id);
+
+            user.setUserName(dto.getUserName());
+            user.setPassword(dto.getPassword());
+            user.setEmail(dto.getEmail());
+            user.setPhone(dto.getPhone());
+            user.setRealName(dto.getRealName());
+            user.setAddress(dto.getAddress());
+            user.setAddressNumber(dto.getAddressNumber());
+            user.setDistrict(dto.getDistrict());
+
         } catch (EntityNotFoundException e){
             System.out.println("Achei não kkkkk"); // todo mudar dps
         }
@@ -55,17 +61,16 @@ public class ClientService {
 
     @Transactional
     public void delete(Long id){
-        if(!clientRepository.existsById(id)){
+        if(!userRepository.existsById(id)){
            System.out.println("nem existe kkkkk"); // todo mudar dps
         }
 
         try {
-            clientRepository.deleteById(id);
+            userRepository.deleteById(id);
         }catch (DataIntegrityViolationException e){
             System.out.println("Bugou aq kkkkkk"); // todo mudar dps
         }
     }
-
 
 
 
