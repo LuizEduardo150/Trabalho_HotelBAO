@@ -2,6 +2,7 @@ package IFMG_LuizEduardo_RenatoZampiere.dtos;
 
 import IFMG_LuizEduardo_RenatoZampiere.model.entities.Stays;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -9,19 +10,20 @@ public class StaysDTO {
 
     private Long userId;
     private Long roomId;
-    private LocalDate start;
-    private LocalDate end;
+    private LocalDate startStay;
+    private LocalDate endStay;
     private LocalTime entryTime;
     private LocalTime departureTime;
-    private Float totalCost;
+    private BigDecimal totalCost;
+
 
     public StaysDTO(){}
 
-    public StaysDTO(Long userId, Long roomId, LocalDate start, LocalDate end, LocalTime entryTime, LocalTime departureTime, Float totalCost) {
+    public StaysDTO(Long userId, Long roomId, LocalDate start, LocalDate end, LocalTime entryTime, LocalTime departureTime, BigDecimal totalCost) {
         this.userId = userId;
         this.roomId = roomId;
-        this.start = start;
-        this.end = end;
+        this.startStay = start;
+        this.endStay = end;
         this.entryTime = entryTime;
         this.departureTime = departureTime;
         this.totalCost = totalCost;
@@ -30,8 +32,8 @@ public class StaysDTO {
     public StaysDTO(Stays stays) {
         userId = stays.getId();
         roomId = stays.getRoomId();
-        start = stays.getStart();
-        end = stays.getEnd();
+        startStay = stays.getStart();
+        endStay = stays.getEnd();
         entryTime = stays.getEntryTime();
         departureTime = stays.getDepartureTime();
         totalCost = stays.getTotalCost();
@@ -55,19 +57,19 @@ public class StaysDTO {
     }
 
     public LocalDate getStart() {
-        return start;
+        return startStay;
     }
 
     public void setStart(LocalDate start) {
-        this.start = start;
+        this.startStay = start;
     }
 
     public LocalDate getEnd() {
-        return end;
+        return endStay;
     }
 
     public void setEnd(LocalDate end) {
-        this.end = end;
+        this.endStay = end;
     }
 
     public LocalTime getEntryTime() {
@@ -86,11 +88,11 @@ public class StaysDTO {
         this.departureTime = departureTime;
     }
 
-    public Float getTotalCost() {
+    public BigDecimal getTotalCost() {
         return totalCost;
     }
 
-    public void setTotalCost(Float totalCost) {
+    public void setTotalCost(BigDecimal totalCost) {
         this.totalCost = totalCost;
     }
 }
