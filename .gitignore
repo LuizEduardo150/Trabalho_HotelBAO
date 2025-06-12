@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+### Mac ###
+.DS_Store
+application.properties
+
+## Global ##
+.gitattributes
