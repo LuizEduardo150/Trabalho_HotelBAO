@@ -35,7 +35,7 @@ build/
 
 ### Mac ###
 .DS_Store
-application.properties
+*.properties
 
 ## Global ##
 .gitattributes
