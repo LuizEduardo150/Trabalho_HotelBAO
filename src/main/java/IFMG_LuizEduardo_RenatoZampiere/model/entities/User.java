@@ -3,13 +3,16 @@ package IFMG_LuizEduardo_RenatoZampiere.model.entities;
 import IFMG_LuizEduardo_RenatoZampiere.dtos.UserDTO;
 import IFMG_LuizEduardo_RenatoZampiere.model.enums.UserType;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.Collection;
 
 
 @Entity
 @Table(name = "user_table")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,6 +62,18 @@ public class User {
         this.registrationDate = LocalDate.now();
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return userName;
+    }
+
+
+
     public LocalDate getRegistrationDate() {
         return registrationDate;
     }
@@ -75,9 +90,7 @@ public class User {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
-    }
+
 
     public void setUserName(String userName) {
         this.userName = userName;

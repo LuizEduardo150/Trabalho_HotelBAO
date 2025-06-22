@@ -6,6 +6,9 @@ import IFMG_LuizEduardo_RenatoZampiere.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +16,7 @@ import java.util.List;
 
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
@@ -34,9 +37,8 @@ public class UserService {
 
     @Transactional
     public void insert(UserDTO dto){
-        System.out.println("Um isert");
-        userRepository.save(new User(dto));
-        System.out.println("fim isnert");
+        System.out.println("Um isert, teste"); // todo remover dps
+        //userRepository.save(new User(dto));
     }
 
     @Transactional
@@ -73,7 +75,10 @@ public class UserService {
     }
 
 
-
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return null;
+    }
 
 
 }
