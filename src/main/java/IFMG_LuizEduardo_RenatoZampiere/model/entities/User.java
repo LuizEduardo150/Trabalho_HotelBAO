@@ -33,19 +33,6 @@ public class User implements UserDetails {
         this.registrationDate = LocalDate.now();
     }
 
-    public User(UserDTO dto){
-        this.userName = dto.getUserName();
-        this.password = dto.getPassword();
-        this.email = dto.getEmail();
-        this.phone = dto.getPhone();
-        this.realName = dto.getRealName();
-        this.address = dto.getAddress();
-        this.addressNumber = dto.getAddressNumber();
-        this.district = dto.getDistrict();
-        this.userType = dto.getUserType();
-        this.registrationDate = LocalDate.now();
-    }
-
     public User(Long id, String userName, String password, String email, String phone, String realName, String address,
                 String addressNumber, String district, UserType userType, LocalDate registrationDate) {
         this.id = id;
@@ -89,8 +76,6 @@ public class User implements UserDetails {
     public void setId(Long id) {
         this.id = id;
     }
-
-
 
     public void setUserName(String userName) {
         this.userName = userName;

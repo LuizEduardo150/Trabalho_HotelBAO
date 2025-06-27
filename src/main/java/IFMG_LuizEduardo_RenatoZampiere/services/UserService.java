@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -46,7 +47,7 @@ public class UserService implements UserDetailsService {
 
         try {
             User user = userRepository.getReferenceById(id);
-
+            /*
             user.setUserName(dto.getUserName());
             user.setPassword(dto.getPassword());
             user.setEmail(dto.getEmail());
@@ -55,7 +56,7 @@ public class UserService implements UserDetailsService {
             user.setAddress(dto.getAddress());
             user.setAddressNumber(dto.getAddressNumber());
             user.setDistrict(dto.getDistrict());
-
+             */
         } catch (EntityNotFoundException e){
             System.out.println("Achei não kkkkk"); // todo mudar dps
         }
@@ -77,7 +78,14 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+        Optional<User> opt = userRepository.findByUserName(username);
+
+        User user = opt.orElseThrow(() -> new UsernameNotFoundException("Usuário nâo encontrado."));
+
+        
+
+
+        return user;
     }
 
 
