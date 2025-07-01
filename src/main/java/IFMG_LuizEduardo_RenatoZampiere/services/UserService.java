@@ -3,7 +3,9 @@ package IFMG_LuizEduardo_RenatoZampiere.services;
 import IFMG_LuizEduardo_RenatoZampiere.dtos.UserDTO;
 import IFMG_LuizEduardo_RenatoZampiere.model.entities.User;
 import IFMG_LuizEduardo_RenatoZampiere.repository.UserRepository;
+import IFMG_LuizEduardo_RenatoZampiere.services.exceptions.DataBaseException;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Console;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,8 +41,15 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void insert(UserDTO dto){
-        System.out.println("Um isert, teste"); // todo remover dps
-        //userRepository.save(new User(dto));
+        try {
+            userRepository.save(new User(dto));
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new DataBaseException("Usuário já existe.");
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     @Transactional

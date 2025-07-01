@@ -3,6 +3,7 @@ package IFMG_LuizEduardo_RenatoZampiere;
 import IFMG_LuizEduardo_RenatoZampiere.model.enums.UserType;
 import org.springframework.jdbc.datasource.init.ScriptStatementFailedException;
 
+import java.io.Console;
 import java.sql.*;
 import java.time.LocalDate;
 
@@ -10,6 +11,14 @@ import IFMG_LuizEduardo_RenatoZampiere.utils.InputOutputPers;
 
 public class AdmRegistration {
     public static void main(String[] args){
+
+        InputOutputPers console = new InputOutputPers();
+
+        if(! console.input("Senha: ").equals("jj")){
+            console.print("Senha inválida. Aplicação encerrda.");
+            System.exit(0);
+        }
+
         String url = "jdbc:postgresql://localhost:5432/hotelBao";
         String user = "postgres";
         String password = "root";
@@ -18,8 +27,6 @@ public class AdmRegistration {
         String sql = "INSERT INTO user_table( " +
                 "address, address_number, district, email, password, phone, real_name, registration_date, user_name, user_type) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        InputOutputPers console = new InputOutputPers();
 
         try {
             conn = DriverManager.getConnection(url, user, password);
@@ -34,7 +41,7 @@ public class AdmRegistration {
             String rua = console.input(">> Rua e Bairro: ");
             pstmt.setString(1, rua);
 
-            String numero = console.input(">> Número da residência");
+            String numero = console.input(">> Número da residência: ");
             pstmt.setString(2, numero);
 
             String cidade = console.input(">> Cidade: ");
@@ -52,7 +59,7 @@ public class AdmRegistration {
             String nome = console.input(">> Nome real: ");
             pstmt.setString(7, nome);
 
-            String username = console.input(">> User name (pode ser usado para loguin): ");
+            String username = console.input(">> User name (usado para loguin): ");
             pstmt.setString(9, username);
 
             pstmt.setString(10, UserType.ADMIN.getValue());

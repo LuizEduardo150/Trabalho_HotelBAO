@@ -6,7 +6,6 @@ import IFMG_LuizEduardo_RenatoZampiere.dtos.UserLoginResponseDTO;
 import IFMG_LuizEduardo_RenatoZampiere.model.entities.User;
 import IFMG_LuizEduardo_RenatoZampiere.model.enums.UserType;
 import IFMG_LuizEduardo_RenatoZampiere.services.UserService;
-import org.aspectj.weaver.tools.Trace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +52,7 @@ public class UserResource {
 
     }
 
-    @PostMapping(produces = "application/json")
+    @PostMapping(value = "/register", produces = "application/json")
     public void insert(@RequestBody UserDTO dto){
         service.insert(dto);
     }
