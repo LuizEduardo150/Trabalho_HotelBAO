@@ -21,28 +21,28 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String userName;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = false)
     private String password;
 
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = false)
     private String phone;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = false)
     private String realName;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = false)
     private String address;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = false)
     private String addressNumber;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = false)
     private String district;
 
-    @Column(nullable = false, unique = true)
+
     private UserType userType;
 
     private LocalDate registrationDate; //  yyyy-MM-dd
