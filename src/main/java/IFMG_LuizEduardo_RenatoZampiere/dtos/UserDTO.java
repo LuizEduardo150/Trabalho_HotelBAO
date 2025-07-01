@@ -1,9 +1,7 @@
 package IFMG_LuizEduardo_RenatoZampiere.dtos;
 
-import IFMG_LuizEduardo_RenatoZampiere.model.entities.User;
-import IFMG_LuizEduardo_RenatoZampiere.model.enums.UserType;
 
-public class UserDTO {
+public class UserDTO{
     private String userName;
     private String password;
     private String email;
@@ -12,11 +10,11 @@ public class UserDTO {
     private String address;
     private String addressNumber;
     private String district;
-    private UserType userType;
 
     public UserDTO(){}
 
-    public UserDTO(String userName, String password, String email, String phone, String realName, String address, String addressNumber, String district, UserType userType) {
+    public UserDTO(String userName, String password, String email, String phone, String realName, String address,
+                String addressNumber, String district) {
         this.userName = userName;
         this.password = password;
         this.email = email;
@@ -25,22 +23,10 @@ public class UserDTO {
         this.address = address;
         this.addressNumber = addressNumber;
         this.district = district;
-        this.userType = userType;
     }
 
-    public UserDTO(User user){
-        this.userName = user.getUsername();
-        this.password = user.getPassword();
-        this.email = user.getEmail();
-        this.phone = user.getPhone();
-        this.realName = user.getRealName();
-        this.address = user.getAddress();
-        this.addressNumber = user.getAddressNumber();
-        this.district = user.getDistrict();
-        this.userType = user.getUserType();
-    }
 
-    public String getUserName() {
+    public String getUsername() {
         return userName;
     }
 
@@ -104,26 +90,4 @@ public class UserDTO {
         this.district = district;
     }
 
-    public UserType getUserType() {
-        return userType;
-    }
-
-    public void setUserType(UserType userType) {
-        this.userType = userType;
-    }
-
-    @Override
-    public String toString() {
-        return "ClientDTO{" +
-                "userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", realName='" + realName + '\'' +
-                ", address='" + address + '\'' +
-                ", addressNumber='" + addressNumber + '\'' +
-                ", district='" + district + '\'' +
-                ", userType=" + userType.getValue() +
-                '}';
-    }
 }

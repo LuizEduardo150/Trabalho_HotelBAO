@@ -18,37 +18,41 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String userName;
+
+    @Column(nullable = false, unique = false)
     private String password;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false, unique = false)
     private String phone;
+
+    @Column(nullable = false, unique = false)
     private String realName;
+
+    @Column(nullable = false, unique = false)
     private String address;
+
+    @Column(nullable = false, unique = false)
     private String addressNumber;
+
+    @Column(nullable = false, unique = false)
     private String district;
+
+
     private UserType userType;
+
     private LocalDate registrationDate; //  yyyy-MM-dd
 
     public User(){
         this.registrationDate = LocalDate.now();
     }
 
-    public User(UserDTO dto){
-        this.userName = dto.getUserName();
-        this.password = dto.getPassword();
-        this.email = dto.getEmail();
-        this.phone = dto.getPhone();
-        this.realName = dto.getRealName();
-        this.address = dto.getAddress();
-        this.addressNumber = dto.getAddressNumber();
-        this.district = dto.getDistrict();
-        this.userType = dto.getUserType();
-        this.registrationDate = LocalDate.now();
-    }
-
-    public User(Long id, String userName, String password, String email, String phone, String realName, String address,
-                String addressNumber, String district, UserType userType, LocalDate registrationDate) {
-        this.id = id;
+    public User(String userName, String password, String email, String phone, String realName, String address,
+                String addressNumber, String district) {
         this.userName = userName;
         this.password = password;
         this.email = email;
@@ -57,8 +61,20 @@ public class User implements UserDetails {
         this.address = address;
         this.addressNumber = addressNumber;
         this.district = district;
-        this.userType = userType;
-        this.registrationDate = registrationDate;
+        this.userType = UserType.CLIENT;
+        this.registrationDate = LocalDate.now();
+    }
+
+    public User(UserDTO dto){
+        this.userName = dto.getUsername();
+        this.password = dto.getPassword();
+        this.email = dto.getEmail();
+        this.phone = dto.getPhone();
+        this.realName = dto.getRealName();
+        this.address = dto.getAddress();
+        this.addressNumber = dto.getAddressNumber();
+        this.district = dto.getDistrict();
+        this.userType = UserType.CLIENT;
         this.registrationDate = LocalDate.now();
     }
 
@@ -89,8 +105,6 @@ public class User implements UserDetails {
     public void setId(Long id) {
         this.id = id;
     }
-
-
 
     public void setUserName(String userName) {
         this.userName = userName;
