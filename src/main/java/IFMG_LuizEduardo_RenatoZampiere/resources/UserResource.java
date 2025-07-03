@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequestMapping(value="/client")
 @RestController
 public class UserResource {
@@ -47,20 +49,22 @@ public class UserResource {
 
 
     @GetMapping
-    public void findAll(){
-        service.findAll();
-
+    public ResponseEntity<List<UserDTO>> findAll(){
+        List<UserDTO> dtoList = service.findAll();
+        return ResponseEntity.ok().body(dtoList);
     }
 
     @PostMapping(value = "/register", produces = "application/json")
-    public void insert(@RequestBody UserDTO dto){
+    public ResponseEntity<Void> insert(@RequestBody UserDTO dto){
         service.insert(dto);
+        return ResponseEntity.ok().build();
     }
 
 
     @PutMapping(value = {"/{id}"})
-    public void update(@PathVariable Long id, @RequestBody UserDTO dto){
+    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody UserDTO dto){
         service.update(id, dto);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(value = {"/{id}"})

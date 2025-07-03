@@ -1,6 +1,8 @@
 package IFMG_LuizEduardo_RenatoZampiere.dtos;
 
 
+import IFMG_LuizEduardo_RenatoZampiere.model.entities.User;
+
 public class UserDTO{
     private String userName;
     private String password;
@@ -23,6 +25,17 @@ public class UserDTO{
         this.address = address;
         this.addressNumber = addressNumber;
         this.district = district;
+    }
+
+    public UserDTO(User user){
+        this.userName = user.getUsername();
+        this.password = user.getPassword();
+        this.email = user.getEmail();
+        this.phone = user.getPhone();
+        this.realName = user.getRealName();
+        this.address = user.getAddress();
+        this.addressNumber = user.getAddressNumber();
+        this.district = user.getDistrict();
     }
 
 
