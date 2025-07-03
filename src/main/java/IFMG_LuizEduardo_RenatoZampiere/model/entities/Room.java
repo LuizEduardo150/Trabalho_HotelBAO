@@ -1,30 +1,46 @@
 package IFMG_LuizEduardo_RenatoZampiere.model.entities;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import IFMG_LuizEduardo_RenatoZampiere.dtos.RoomDTO;
+import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = "rooms_table")
 public class Room {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = false)
     private String name;
-    private String price;
+
+    @Column(precision = 15, scale = 2, nullable = false, unique = false)
+    private BigDecimal price;
+
+    @Column(nullable = false, unique = false)
     private Integer numberOfBeds;
+
+    @Column(nullable = false, unique = false)
     private Integer score;
 
     // imagens ????
 
     public Room() {}
 
-    public Room(Long id, String name, String price, Integer numberOfBeds, Integer score) {
-        this.id = id;
+    public Room(String name, String price, Integer numberOfBeds, Integer score) {
         this.name = name;
-        this.price = price;
+        this.price = new BigDecimal(price);
         this.numberOfBeds = numberOfBeds;
         this.score = score;
+    }
+
+    public Room(RoomDTO dto){
+        this.name = dto.getName();
+        this.price = new BigDecimal(dto.getPrice());
+        this.numberOfBeds = dto.getNumberOfBeds();
+        this.score = dto.getScore();
     }
 
     public Integer getScore(){
@@ -47,11 +63,11 @@ public class Room {
         this.name = name;
     }
 
-    public String getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

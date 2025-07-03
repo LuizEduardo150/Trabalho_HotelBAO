@@ -5,7 +5,6 @@ import IFMG_LuizEduardo_RenatoZampiere.model.entities.User;
 import IFMG_LuizEduardo_RenatoZampiere.repository.UserRepository;
 import IFMG_LuizEduardo_RenatoZampiere.services.exceptions.DataBaseException;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.Console;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,11 +25,15 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public void findAll(){ // todo mudar dps o que faz
-        List ret = userRepository.findAll();
-        for (Object iten: ret){
-            System.out.println(iten);
+    public List<UserDTO> findAll(){
+        List<User> listUsers = userRepository.findAll();
+        List<UserDTO> dto = new ArrayList<>();
+
+        for (User user : listUsers){
+            dto.add(new UserDTO(user));
         }
+
+        return dto;
     }
 
     @Transactional(readOnly = true)
