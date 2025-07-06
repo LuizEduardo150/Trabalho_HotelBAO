@@ -5,6 +5,7 @@ import IFMG_LuizEduardo_RenatoZampiere.model.entities.Room;
 import IFMG_LuizEduardo_RenatoZampiere.services.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.http.client.AbstractHttpRequestFactoryProperties;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -20,35 +21,35 @@ public class RoomResource {
     private RoomService roomService;
 
     @GetMapping
-    public List<RoomDTO> findAll(){
-        return roomService.findAll();
+    public ResponseEntity<List<RoomDTO>> findAll(){
+        List<RoomDTO> dtoList = roomService.findAll();
+        return ResponseEntity.ok().body(dtoList);
     }
 
-    @GetMapping(value = "/id")
-    public RoomDTO getRoomById(@PathVariable Long id){
-        roomService.findById(id);
-        return null;
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<RoomDTO> getRoomById(@PathVariable Long id){
+        RoomDTO dto = roomService.findById(id);
+        return ResponseEntity.ok().body(dto);
     }
 
     @PostMapping
-    public void insert(@RequestBody RoomDTO dto){
+    public ResponseEntity<Void> insert(@RequestBody RoomDTO dto){
         roomService.insert(dto);
+        return ResponseEntity.ok().build();
     }
 
-    @PutMapping
-    public void update(@PathVariable Long id, @RequestBody RoomDTO dto){
-
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Void> updateById(@PathVariable Long id, @RequestBody RoomDTO dto){
+        roomService.updateById(id, dto);
+        return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(value = "/id")
-    public void delete(){
-
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id){
+        System.out.println("bora deletar");
+        roomService.delteById(id);
+        return ResponseEntity.ok().build();
     }
-
-
-
-
-
 
 
 

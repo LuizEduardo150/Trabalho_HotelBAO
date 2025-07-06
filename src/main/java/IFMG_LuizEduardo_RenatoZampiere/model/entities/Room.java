@@ -43,6 +43,10 @@ public class Room {
         this.score = dto.getScore();
     }
 
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
     public Integer getScore(){
         return score;
     }
