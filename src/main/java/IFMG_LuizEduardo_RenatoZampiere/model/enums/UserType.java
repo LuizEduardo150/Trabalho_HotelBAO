@@ -2,8 +2,9 @@ package IFMG_LuizEduardo_RenatoZampiere.model.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import org.springframework.security.core.GrantedAuthority;
 
-public enum UserType {
+public enum UserType implements GrantedAuthority {
 
     GUEST("guest"),
     CLIENT("client"),
@@ -32,4 +33,8 @@ public enum UserType {
         throw new IllegalArgumentException("Invalid user Type: " + value);
     }
 
+    @Override
+    public String getAuthority() {
+        return value;
+    }
 }
