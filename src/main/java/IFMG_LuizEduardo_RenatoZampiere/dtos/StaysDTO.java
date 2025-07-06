@@ -12,8 +12,6 @@ public class StaysDTO {
     private Long roomId;
     private LocalDate startStay;
     private LocalDate endStay;
-    private LocalTime entryTime;
-    private LocalTime departureTime;
     private BigDecimal totalCost;
 
 
@@ -24,18 +22,14 @@ public class StaysDTO {
         this.roomId = roomId;
         this.startStay = start;
         this.endStay = end;
-        this.entryTime = entryTime;
-        this.departureTime = departureTime;
         this.totalCost = totalCost;
     }
 
     public StaysDTO(Stays stays) {
         userId = stays.getId();
         roomId = stays.getRoomId();
-        startStay = stays.getStart();
-        endStay = stays.getEnd();
-        entryTime = stays.getEntryTime();
-        departureTime = stays.getDepartureTime();
+        startStay = stays.getStartStay();
+        endStay = stays.getEndStay();
         totalCost = stays.getTotalCost();
     }
 
@@ -44,8 +38,8 @@ public class StaysDTO {
         return userId;
     }
 
-    public void setClientId(Long clientId) {
-        this.userId = clientId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Long getRoomId() {
@@ -56,36 +50,20 @@ public class StaysDTO {
         this.roomId = roomId;
     }
 
-    public LocalDate getStart() {
+    public LocalDate getStartStay() {
         return startStay;
     }
 
-    public void setStart(LocalDate start) {
-        this.startStay = start;
+    public void setStartStay(LocalDate startStay) {
+        this.startStay = startStay;
     }
 
-    public LocalDate getEnd() {
+    public LocalDate getEndStay() {
         return endStay;
     }
 
-    public void setEnd(LocalDate end) {
-        this.endStay = end;
-    }
-
-    public LocalTime getEntryTime() {
-        return entryTime;
-    }
-
-    public void setEntryTime(LocalTime entryTime) {
-        this.entryTime = entryTime;
-    }
-
-    public LocalTime getDepartureTime() {
-        return departureTime;
-    }
-
-    public void setDepartureTime(LocalTime departureTime) {
-        this.departureTime = departureTime;
+    public void setEndStay(LocalDate endStay) {
+        this.endStay = endStay;
     }
 
     public BigDecimal getTotalCost() {

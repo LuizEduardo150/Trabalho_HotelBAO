@@ -19,12 +19,14 @@ public class Stays {
     @JoinColumn(name = "user_id") // todo conferir
     private User userId;
 
-    private Long roomId; // todo mudar dps para chave estranjeira
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id")
+    private Room roomId;
 
+    @Column(nullable = false, unique = false)
     private LocalDate startStay; //  yyyy-MM-dd
+    @Column(nullable = false, unique = false)
     private LocalDate endStay; //  yyyy-MM-dd
-    private LocalTime entryTime; //  00:00:00
-    private LocalTime departureTime; // 00:00:00
     private BigDecimal totalCost;
 
     public Stays(){}
@@ -33,22 +35,22 @@ public class Stays {
         User u = new User();
         u.setId(dto.getUserId());
         this.userId = u;
-        this.roomId = dto.getRoomId();
-        this.startStay = dto.getStart();
-        this.endStay = dto.getEnd();
-        this.entryTime = dto.getEntryTime();
-        this.departureTime = dto.getDepartureTime();
+        Room r = new Room();
+        r.setId(dto.getRoomId());
+        this.roomId = r;
+        this.startStay = dto.getStartStay();
+        this.endStay = dto.getEndStay();
         this.totalCost = dto.getTotalCost();
     }
 
-    public Stays(Long id, User userId, Long roomId, LocalDate start, LocalDate end, LocalTime entryTime, LocalTime departureTime, BigDecimal totalCost) {
+    public Stays(Long id, User userId, Long roomId, LocalDate start, LocalDate end, BigDecimal totalCost) {
         this.id = id;
         this.userId = userId;
-        this.roomId = roomId;
+        Room r = new Room();
+        r.setId(roomId);
+        this.roomId = r;
         this.startStay = start;
         this.endStay = end;
-        this.entryTime = entryTime;
-        this.departureTime = departureTime;
         this.totalCost = totalCost;
     }
 
@@ -69,43 +71,29 @@ public class Stays {
     }
 
     public Long getRoomId() {
-        return roomId;
+        return roomId.getId();
     }
 
     public void setRoomId(Long roomId) {
-        this.roomId = roomId;
+        Room r = new Room();
+        r.setId(roomId);
+        this.roomId = r;
     }
 
-    public LocalDate getStart() {
+    public LocalDate getStartStay() {
         return startStay;
     }
 
-    public void setStart(LocalDate start) {
-        this.startStay = start;
+    public void setStartStay(LocalDate startStay) {
+        this.startStay = startStay;
     }
 
-    public LocalDate getEnd() {
+    public LocalDate getEndStay() {
         return endStay;
     }
 
-    public void setEnd(LocalDate end) {
-        this.endStay = end;
-    }
-
-    public LocalTime getEntryTime() {
-        return entryTime;
-    }
-
-    public void setEntryTime(LocalTime entryTime) {
-        this.entryTime = entryTime;
-    }
-
-    public LocalTime getDepartureTime() {
-        return departureTime;
-    }
-
-    public void setDepartureTime(LocalTime departureTime) {
-        this.departureTime = departureTime;
+    public void setEndStay(LocalDate endStay) {
+        this.endStay = endStay;
     }
 
     public BigDecimal getTotalCost() {
@@ -114,19 +102,5 @@ public class Stays {
 
     public void setTotalCost(BigDecimal totalCost) {
         this.totalCost = totalCost;
-    }
-
-    @Override
-    public String toString() {
-        return "Stays{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", roomId=" + roomId +
-                ", startStays=" + startStay +
-                ", endStays=" + endStay +
-                ", entryTime=" + entryTime +
-                ", departureTime=" + departureTime +
-                ", totalCost=" + totalCost +
-                '}';
     }
 }

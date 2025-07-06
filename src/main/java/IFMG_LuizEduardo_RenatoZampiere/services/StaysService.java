@@ -4,6 +4,8 @@ import IFMG_LuizEduardo_RenatoZampiere.dtos.StaysDTO;
 import IFMG_LuizEduardo_RenatoZampiere.model.entities.Stays;
 import IFMG_LuizEduardo_RenatoZampiere.model.entities.User;
 import IFMG_LuizEduardo_RenatoZampiere.repository.StaysRepository;
+import IFMG_LuizEduardo_RenatoZampiere.services.exceptions.DataBaseException;
+import IFMG_LuizEduardo_RenatoZampiere.services.exceptions.ResourceNotFound;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StaysService {
@@ -19,58 +22,74 @@ public class StaysService {
     private StaysRepository staysRepository;
 
     @Transactional(readOnly = true)
-    public void findAll(){ // todo mudar dps o que faz
-        List ret = staysRepository.findAll();
-        for (Object iten: ret){
-            System.out.println(iten);
-        }
+    public List<StaysDTO> findAll(){
+
+        List<Stays> ret = staysRepository.findAll();
+        List <StaysDTO> dto = ret.stream().map((stay) -> new StaysDTO(stay)).toList();
+
+        return dto;
     }
 
     @Transactional(readOnly = true)
-    public void findById(Long id){
-        staysRepository.findById(id);
+    public StaysDTO findById(Long id){
 
+        Optional <Stays> opt = staysRepository.findById(id);
+        Stays ret = opt.orElseThrow(() -> new ResourceNotFound("Estadia não encontrada: " + id));
+
+        return new StaysDTO(ret);
     }
 
     @Transactional
     public void insert(StaysDTO dto){
-        staysRepository.save(new Stays(dto));
+
+        try {
+            staysRepository.save(new Stays(dto));
+
+        } catch (DataIntegrityViolationException e) {
+
+            System.out.println("Falha ao adicionar estadia, verifique os tipos de dado");
+        } catch (Exception e) {
+
+            System.out.println(e);
+        }
+
     }
 
     @Transactional
     public void update(Long id, StaysDTO dto){
 
-        try {//todo conferir algumas regras de ngc
+        try {
             Stays stays = staysRepository.getReferenceById(id);
-            User u = new User();
-            u.setId(dto.getUserId());
-            stays.setUserId(u);
-            stays.setRoomId(dto.getRoomId());
-            stays.setStart(dto.getStart());
-            stays.setEnd(dto.getEnd());
-            stays.setEntryTime(dto.getEntryTime());
-            stays.setDepartureTime(dto.getDepartureTime());
+            stays.setStartStay(dto.getStartStay());
+            stays.setEndStay(dto.getEndStay());
             stays.setTotalCost(dto.getTotalCost());
+            User user = new User();
+            user.setId(dto.getUserId());
+            stays.setUserId(user);
 
         } catch (EntityNotFoundException e){
-            System.out.println("Achei não kkkkk"); // todo mudar dps
+            throw new DataBaseException("Não existe estadia cadastrada com o ID: " + id);
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new DataBaseException("Falha ao atualizar estadia, verifique os tipos de dado");
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
 
     @Transactional
     public void delete(Long id){
         if(!staysRepository.existsById(id)){
-            System.out.println("nem existe kkkkk"); // todo mudar dps
+            throw new ResourceNotFound("Não existe estadia cadastrada com o ID: " + id);
         }
 
         try {
             staysRepository.deleteById(id);
         }catch (DataIntegrityViolationException e){
-            System.out.println("Bugou aq kkkkkk"); // todo mudar dps
+            throw new DataBaseException("Falha ao deletar estadia, verifique se a estadia está vinculada a outros registros");
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
-
-
-
 
 }
