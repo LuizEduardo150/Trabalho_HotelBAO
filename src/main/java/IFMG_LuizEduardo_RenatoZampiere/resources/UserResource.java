@@ -80,6 +80,14 @@ public class UserResource {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping(value = "/gt/{name}")
+    public ResponseEntity<UserBasicDataDTO> getUserIdByUserName(@PathVariable String name){
+        Long id = service.getUserIdByUserName(name);
+        UserBasicDataDTO dto = new UserBasicDataDTO();
+        dto.setId(id);
+        return ResponseEntity.ok().body(dto);
+    }
+
     @GetMapping(value = "/name/{name}")
     public ResponseEntity<UserDTO> findByRealName(@PathVariable String name) {
         UserDTO dto = service.getByRealName(name);

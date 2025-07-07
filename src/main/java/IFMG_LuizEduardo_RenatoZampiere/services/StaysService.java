@@ -1,8 +1,10 @@
 package IFMG_LuizEduardo_RenatoZampiere.services;
 
 import IFMG_LuizEduardo_RenatoZampiere.dtos.StaysDTO;
+import IFMG_LuizEduardo_RenatoZampiere.dtos.StaysUserDetailedDTO;
 import IFMG_LuizEduardo_RenatoZampiere.model.entities.Stays;
 import IFMG_LuizEduardo_RenatoZampiere.model.entities.User;
+import IFMG_LuizEduardo_RenatoZampiere.projections.StaysUserDetailedProjection;
 import IFMG_LuizEduardo_RenatoZampiere.repository.StaysRepository;
 import IFMG_LuizEduardo_RenatoZampiere.services.exceptions.DataBaseException;
 import IFMG_LuizEduardo_RenatoZampiere.services.exceptions.ResourceNotFound;
@@ -12,6 +14,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +32,39 @@ public class StaysService {
 
         return dto;
     }
+
+    @Transactional(readOnly = true)
+    public List<StaysUserDetailedDTO> findAllDetailed(){
+
+        List<StaysUserDetailedProjection> list = staysRepository.getAllStaysDetailed();
+        List<StaysUserDetailedDTO> dtoList = new ArrayList<>();
+
+        for (StaysUserDetailedProjection stay : list){
+            StaysUserDetailedDTO dto = new StaysUserDetailedDTO();
+            dto.setUserId(stay.getUserId());
+            dto.setRoomId(stay.getRoomId());
+            dto.setRoomName(stay.getRoomName());
+            dto.setClientName(stay.getClientName());
+            dto.setClientPhone(stay.getClientPhone());
+            dto.setClientEmail(stay.getClientEmail());
+            dto.setStartStay(stay.getStartStay());
+            dto.setEndStay(stay.getEndStay());
+            dto.setTotalCost(stay.getTotalCost());
+
+            dtoList.add(dto);
+        }
+
+        return dtoList;
+    }
+
+    @Transactional(readOnly = true)
+    public List<StaysDTO> getStaysOfRoomById(Long roomId){
+
+        List<Stays> list = staysRepository.getStaysOfRoomById(roomId);
+
+        return list.stream().map(StaysDTO::new).toList();
+    }
+
 
     @Transactional(readOnly = true)
     public StaysDTO findById(Long id){

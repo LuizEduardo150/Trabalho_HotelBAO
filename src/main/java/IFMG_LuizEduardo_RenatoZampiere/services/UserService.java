@@ -117,6 +117,12 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
+    public Long getUserIdByUserName(String name){
+        Optional<Long> opt = userRepository.getUserIdByUserName(name);
+        return opt.orElseThrow(() -> new ResourceNotFound("Não existe usuário com nome: "+ name));
+    }
+
+    @Transactional(readOnly = true)
     public UserDTO getByRealName(String name){ // todo ver q pode retronar mais de um
         Optional<User> opt = userRepository.getByRealName(name);
         User user = opt.orElseThrow(() -> new ResourceNotFound("Usuário não encontrado" + name));

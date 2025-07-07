@@ -26,7 +26,7 @@ public class StaysDTO {
     }
 
     public StaysDTO(Stays stays) {
-        userId = stays.getId();
+        userId = stays.getUserId().getId();
         roomId = stays.getRoomId();
         startStay = stays.getStartStay();
         endStay = stays.getEndStay();

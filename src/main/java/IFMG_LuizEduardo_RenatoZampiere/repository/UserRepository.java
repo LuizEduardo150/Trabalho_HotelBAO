@@ -21,23 +21,32 @@ public interface UserRepository extends JpaRepository <User, Long>{
     public Page<UserBasicDataDTO> getAllPaged(Pageable pageable);
 
     @Query(
-            nativeQuery = true,
-            value = """
-                    SELECT id, address, address_number, district, email, password, phone, real_name, registration_date, user_name, user_type
-                    	FROM public.user_table WHERE email = :email;
-                    """
+        nativeQuery = true,
+        value = """
+                SELECT id, address, address_number, district, email, password, phone, real_name, registration_date, user_name, user_type
+                    FROM public.user_table WHERE email = :email;
+                """
     )
     public  Optional<User> getByEmail(String email);
 
     @Query(
-            nativeQuery = true,
-            value = """
-                    SELECT id, address, address_number, district, email, password, phone, real_name, registration_date, user_name, user_type
-                    	FROM public.user_table WHERE real_name = :name;
-                    """
+        nativeQuery = true,
+        value = """
+                SELECT id, address, address_number, district, email, password, phone, real_name, registration_date, user_name, user_type
+                    FROM public.user_table WHERE real_name = :name;
+                """
     )
     public Optional<User> getByRealName(String name);
 
+
+
+    @Query(
+        nativeQuery = true,
+        value = """
+                SELECT id FROM public.user_table WHERE user_name = :userName;
+                """
+    )
+    public Optional<Long> getUserIdByUserName(String userName);
 
 
 
