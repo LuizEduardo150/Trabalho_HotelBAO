@@ -68,4 +68,11 @@ public class StaysResource {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping(value = "/Ustays/{id}")
+    public ResponseEntity<List<StaysUserDetailedDTO>> getStaysByUserId(@PathVariable Long id){
+        System.out.println("Buscando estadias do usuário com ID: " + id);
+        List<StaysUserDetailedDTO> list =  staysService.getStaysUserId(id);
+        return ResponseEntity.ok().body(list);
+    }
+
 }

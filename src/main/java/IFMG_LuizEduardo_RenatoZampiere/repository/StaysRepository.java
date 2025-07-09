@@ -48,6 +48,27 @@ public interface StaysRepository extends JpaRepository <Stays, Long> {
     """)
     public List<Stays> getStaysOfRoomById(Long id);
 
-
+    @Query(nativeQuery = true, value = """
+        SELECT
+            u.id AS userId,
+            r.id AS roomId,
+            r.name AS roomName,
+            u.real_name AS clientName,
+            u.phone AS clientPhone,
+            u.email AS clientEmail,
+            s.start_stay As startStay,
+            s.end_stay AS endStay,
+            s.total_cost AS totalCost
+        FROM
+            stays_table s
+        JOIN
+            user_table u ON s.user_id = u.id
+        JOIN
+            rooms_table r ON s.room_id = r.id
+        WHERE
+            u.id = :u_id
+        ;
+    """)
+    public List<StaysUserDetailedProjection> getStaysUserId(Long u_id);
 
 }

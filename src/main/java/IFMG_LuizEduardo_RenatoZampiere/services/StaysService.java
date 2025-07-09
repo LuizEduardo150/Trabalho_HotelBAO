@@ -128,4 +128,29 @@ public class StaysService {
         }
     }
 
+    @Transactional(readOnly = true)
+    public List<StaysUserDetailedDTO> getStaysUserId(Long userId){
+
+        List<StaysUserDetailedProjection> list = staysRepository.getStaysUserId(userId);
+
+        List<StaysUserDetailedDTO> dtoList = new ArrayList<>();
+
+        for (StaysUserDetailedProjection stay : list){
+            StaysUserDetailedDTO dto = new StaysUserDetailedDTO();
+            dto.setUserId(stay.getUserId());
+            dto.setRoomId(stay.getRoomId());
+            dto.setRoomName(stay.getRoomName());
+            dto.setClientName(stay.getClientName());
+            dto.setClientPhone(stay.getClientPhone());
+            dto.setClientEmail(stay.getClientEmail());
+            dto.setStartStay(stay.getStartStay());
+            dto.setEndStay(stay.getEndStay());
+            dto.setTotalCost(stay.getTotalCost());
+
+            dtoList.add(dto);
+        }
+
+        return dtoList;
+    }
+
 }
