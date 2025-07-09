@@ -157,6 +157,7 @@ public class StaysService {
 
         for (StaysUserDetailedProjection stay : list){
             StaysUserDetailedDTO dto = new StaysUserDetailedDTO();
+            dto.setId(stay.getId());
             dto.setUserId(stay.getUserId());
             dto.setRoomId(stay.getRoomId());
             dto.setRoomName(stay.getRoomName());

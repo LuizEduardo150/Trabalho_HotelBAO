@@ -52,6 +52,7 @@ public interface StaysRepository extends JpaRepository <Stays, Long> {
 
     @Query(nativeQuery = true, value = """
         SELECT
+            s.id AS id,
             u.id AS userId,
             r.id AS roomId,
             r.name AS roomName,
