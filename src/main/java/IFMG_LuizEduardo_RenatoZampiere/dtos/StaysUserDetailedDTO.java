@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class StaysUserDetailedDTO {
-
+    private Long id;
     private Long userId;
     private Long roomId;
     private String roomName;
@@ -17,7 +17,8 @@ public class StaysUserDetailedDTO {
 
     public StaysUserDetailedDTO() {}
 
-    public StaysUserDetailedDTO(Long userId, Long roomId, String roomName, String clientName, String clientPhone, String clientEmail, LocalDate startStay, LocalDate endStay, BigDecimal totalCost) {
+    public StaysUserDetailedDTO(Long id, Long userId, Long roomId, String roomName, String clientName, String clientPhone, String clientEmail, LocalDate startStay, LocalDate endStay, BigDecimal totalCost) {
+        this.id = id;
         this.userId = userId;
         this.roomId = roomId;
         this.roomName = roomName;
@@ -27,6 +28,14 @@ public class StaysUserDetailedDTO {
         this.startStay = startStay;
         this.endStay = endStay;
         this.totalCost = totalCost;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getRoomName() {

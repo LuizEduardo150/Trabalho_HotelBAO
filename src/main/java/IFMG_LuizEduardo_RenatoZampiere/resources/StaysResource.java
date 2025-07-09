@@ -1,6 +1,7 @@
 package IFMG_LuizEduardo_RenatoZampiere.resources;
 
 import IFMG_LuizEduardo_RenatoZampiere.dtos.StaysDTO;
+import IFMG_LuizEduardo_RenatoZampiere.dtos.StaysDetailedWithoutUserDataDTO;
 import IFMG_LuizEduardo_RenatoZampiere.dtos.StaysUserDetailedDTO;
 import IFMG_LuizEduardo_RenatoZampiere.services.StaysService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,12 @@ public class StaysResource {
         return ResponseEntity.ok().body(list);
     }
 
+    @GetMapping(value="/staysDWTOUserD/{user_id}")
+    public ResponseEntity<List<StaysDetailedWithoutUserDataDTO>> getStaysDetailedWithoutUserData(@PathVariable Long user_id){
+        List<StaysDetailedWithoutUserDataDTO> list = staysService.getStaysDetailedWithoutUserData(user_id);
+        return ResponseEntity.ok().body(list);
+    }
+
     @PostMapping
     public ResponseEntity<Void> insert(@RequestBody StaysDTO dto){
 
@@ -67,6 +74,9 @@ public class StaysResource {
 
         return ResponseEntity.ok().build();
     }
+
+
+
 
     @GetMapping(value = "/Ustays/{id}")
     public ResponseEntity<List<StaysUserDetailedDTO>> getStaysByUserId(@PathVariable Long id){
