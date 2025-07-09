@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public interface StaysUserDetailedProjection {
+    Long getId();
     Long getUserId();
     Long getRoomId();
     String getRoomName();

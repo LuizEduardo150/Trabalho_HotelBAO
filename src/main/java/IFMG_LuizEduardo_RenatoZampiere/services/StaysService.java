@@ -1,9 +1,11 @@
 package IFMG_LuizEduardo_RenatoZampiere.services;
 
 import IFMG_LuizEduardo_RenatoZampiere.dtos.StaysDTO;
+import IFMG_LuizEduardo_RenatoZampiere.dtos.StaysDetailedWithoutUserDataDTO;
 import IFMG_LuizEduardo_RenatoZampiere.dtos.StaysUserDetailedDTO;
 import IFMG_LuizEduardo_RenatoZampiere.model.entities.Stays;
 import IFMG_LuizEduardo_RenatoZampiere.model.entities.User;
+import IFMG_LuizEduardo_RenatoZampiere.projections.StaysDetailedWithoutUserDataProjection;
 import IFMG_LuizEduardo_RenatoZampiere.projections.StaysUserDetailedProjection;
 import IFMG_LuizEduardo_RenatoZampiere.repository.StaysRepository;
 import IFMG_LuizEduardo_RenatoZampiere.services.exceptions.DataBaseException;
@@ -41,6 +43,7 @@ public class StaysService {
 
         for (StaysUserDetailedProjection stay : list){
             StaysUserDetailedDTO dto = new StaysUserDetailedDTO();
+            dto.setId(stay.getId());
             dto.setUserId(stay.getUserId());
             dto.setRoomId(stay.getRoomId());
             dto.setRoomName(stay.getRoomName());
@@ -75,6 +78,27 @@ public class StaysService {
         return new StaysDTO(ret);
     }
 
+    @Transactional(readOnly = true)
+    public List<StaysDetailedWithoutUserDataDTO> getStaysDetailedWithoutUserData(Long id){
+        List<StaysDetailedWithoutUserDataProjection> list = staysRepository.getStaysDetailedWithoutUserData(id);
+        List<StaysDetailedWithoutUserDataDTO> dtoList = new ArrayList<>();
+
+        for (StaysDetailedWithoutUserDataProjection proj : list){
+            StaysDetailedWithoutUserDataDTO dto = new StaysDetailedWithoutUserDataDTO();
+
+            dto.setRoomName(proj.getRoomName());
+            dto.setScore(proj.getScore());
+            dto.setRoomCost(proj.getRoomCost());
+            dto.setTotalStayCost(proj.getTotalStayCost());
+            dto.setStartStay(proj.getStartStay());
+            dto.setEndStay(proj.getEndStay());
+
+            dtoList.add(dto);
+        }
+
+        return dtoList;
+    }
+
     @Transactional
     public void insert(StaysDTO dto){
 
@@ -99,10 +123,6 @@ public class StaysService {
             stays.setStartStay(dto.getStartStay());
             stays.setEndStay(dto.getEndStay());
             stays.setTotalCost(dto.getTotalCost());
-            User user = new User();
-            user.setId(dto.getUserId());
-            stays.setUserId(user);
-
         } catch (EntityNotFoundException e){
             throw new DataBaseException("Não existe estadia cadastrada com o ID: " + id);
         }

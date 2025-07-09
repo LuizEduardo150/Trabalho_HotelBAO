@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class StaysDTO {
-
+    private Long id;
     private Long userId;
     private Long roomId;
     private LocalDate startStay;
@@ -17,7 +17,8 @@ public class StaysDTO {
 
     public StaysDTO(){}
 
-    public StaysDTO(Long userId, Long roomId, LocalDate start, LocalDate end, LocalTime entryTime, LocalTime departureTime, BigDecimal totalCost) {
+    public StaysDTO(Long id, Long userId, Long roomId, LocalDate start, LocalDate end, LocalTime entryTime, LocalTime departureTime, BigDecimal totalCost) {
+        this.id = id;
         this.userId = userId;
         this.roomId = roomId;
         this.startStay = start;
@@ -26,6 +27,7 @@ public class StaysDTO {
     }
 
     public StaysDTO(Stays stays) {
+        id = stays.getId();
         userId = stays.getUserId().getId();
         roomId = stays.getRoomId();
         startStay = stays.getStartStay();
@@ -33,6 +35,13 @@ public class StaysDTO {
         totalCost = stays.getTotalCost();
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getUserId() {
         return userId;
