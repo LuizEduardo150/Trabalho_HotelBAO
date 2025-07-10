@@ -9,6 +9,7 @@ import IFMG_LuizEduardo_RenatoZampiere.projections.StaysDetailedWithoutUserDataP
 import IFMG_LuizEduardo_RenatoZampiere.projections.StaysUserDetailedProjection;
 import IFMG_LuizEduardo_RenatoZampiere.repository.RoomRepository;
 import IFMG_LuizEduardo_RenatoZampiere.repository.StaysRepository;
+import IFMG_LuizEduardo_RenatoZampiere.repository.UserRepository;
 import IFMG_LuizEduardo_RenatoZampiere.services.exceptions.DataBaseException;
 import IFMG_LuizEduardo_RenatoZampiere.services.exceptions.ResourceNotFound;
 import jakarta.persistence.EntityNotFoundException;
@@ -33,6 +34,10 @@ public class StaysService {
 
     @Autowired
     private RoomRepository roomRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
 
     @Transactional(readOnly = true)
     public List<StaysDTO> findAll(){
@@ -221,10 +226,91 @@ public class StaysService {
         return dtoList;
     }
 
+    @Transactional(readOnly = true)
+    public List<StaysDetailedWithoutUserDataDTO> getStaysByUserName(String userName){
+
+        Optional<User> opt = userRepository.findByUserName(userName);
+
+        User user = opt.orElseThrow(() -> new ResourceNotFound("Não há usuário cadastrado com esse nome de usuário"));
+
+        List<StaysDetailedWithoutUserDataProjection> list =  staysRepository.getStaysDetailedWithoutUserData(user.getId());
+
+        List<StaysDetailedWithoutUserDataDTO> dtoList = new ArrayList<>();
+
+        for (StaysDetailedWithoutUserDataProjection stay : list){
+            StaysDetailedWithoutUserDataDTO dto = new StaysDetailedWithoutUserDataDTO();
+            dto.setEndStay(stay.getEndStay());
+            dto.setStartStay(stay.getStartStay());
+            dto.setScore(stay.getScore());
+            dto.setTotalStayCost(stay.getTotalStayCost());
+            dto.setRoomName(stay.getRoomName());
+            dto.setRoomCost(stay.getRoomCost());
+
+            dtoList.add(dto);
+        }
+
+        return dtoList;
+    }
 
     @Transactional
     public void deleAllStays(){
         staysRepository.deleteAll();
+    }
+
+    @Transactional(readOnly = true)
+    public StaysDetailedWithoutUserDataDTO getUserMostExpensiveStay(String userName){
+
+        Optional<Long> opt = userRepository.getUserIdByUserName(userName);
+
+        Long op = opt.orElseThrow(()-> new ResourceNotFound("Não existe usuário com esse nome de usuário."));
+
+        List<StaysDetailedWithoutUserDataProjection> proj = staysRepository.getStaysDetailedWithoutUserData(op);
+
+        StaysDetailedWithoutUserDataDTO retDto = new StaysDetailedWithoutUserDataDTO();
+        retDto.setTotalStayCost(new BigDecimal(0));
+
+        for (StaysDetailedWithoutUserDataProjection data : proj){
+            if (data.getTotalStayCost().compareTo(retDto.getTotalStayCost()) >= 0){
+                retDto.setRoomCost(data.getRoomCost());
+                retDto.setRoomName(data.getRoomName());
+                retDto.setStartStay(data.getStartStay());
+                retDto.setEndStay(data.getEndStay());
+                retDto.setScore(data.getScore());
+                retDto.setTotalStayCost(data.getTotalStayCost());
+            }
+        }
+
+        return retDto;
+    }
+
+    @Transactional(readOnly = true)
+    public StaysDetailedWithoutUserDataDTO getUserLessExpensiveStay(String userName){
+
+        Optional<Long> opt = userRepository.getUserIdByUserName(userName);
+
+        Long op = opt.orElseThrow(()-> new ResourceNotFound("Não existe usuário com esse nome de usuário."));
+
+        List<StaysDetailedWithoutUserDataProjection> proj = staysRepository.getStaysDetailedWithoutUserData(op);
+
+        StaysDetailedWithoutUserDataDTO retDto = new StaysDetailedWithoutUserDataDTO();
+
+
+        for (StaysDetailedWithoutUserDataProjection data : proj){
+
+            if (retDto.getTotalStayCost() == null)
+                retDto.setTotalStayCost(data.getTotalStayCost());
+
+            if (data.getTotalStayCost().compareTo(retDto.getTotalStayCost()) <= 0){
+                retDto.setRoomCost(data.getRoomCost());
+                retDto.setStartStay(data.getStartStay());
+                retDto.setRoomName(data.getRoomName());
+                retDto.setEndStay(data.getEndStay());
+                retDto.setScore(data.getScore());
+                retDto.setTotalStayCost(data.getTotalStayCost());
+            }
+        }
+
+        return retDto;
     }
 
 

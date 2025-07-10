@@ -101,10 +101,30 @@ public class StaysResource {
         return ResponseEntity.ok().body(list);
     }
 
+
+    @GetMapping(value = "/UstaysBUname/{userName}")
+    public ResponseEntity<List<StaysDetailedWithoutUserDataDTO>> getStaysByUserName(@PathVariable String userName){
+
+        List<StaysDetailedWithoutUserDataDTO> dto = staysService.getStaysByUserName(userName);
+        return ResponseEntity.ok().body(dto);
+    }
+
     @DeleteMapping(value = "/dltallsure0-0")
     public ResponseEntity<Void> deleteAll(){
         staysService.deleAllStays();
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/usrMExStay/{userName}")
+    public ResponseEntity<StaysDetailedWithoutUserDataDTO> getUserMostExpensiveStay(@PathVariable String userName){
+        StaysDetailedWithoutUserDataDTO retdto = staysService.getUserMostExpensiveStay(userName);
+        return ResponseEntity.ok().body(retdto);
+    }
+
+    @GetMapping(value = "/usrLExStay/{userName}")
+    public ResponseEntity<StaysDetailedWithoutUserDataDTO> getUserLessExpensiveStay(@PathVariable String userName){
+        StaysDetailedWithoutUserDataDTO retdto = staysService.getUserLessExpensiveStay(userName);
+        return ResponseEntity.ok().body(retdto);
     }
 
 
