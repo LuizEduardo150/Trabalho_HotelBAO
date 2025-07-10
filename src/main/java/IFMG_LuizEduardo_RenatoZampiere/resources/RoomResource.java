@@ -46,18 +46,15 @@ public class RoomResource {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id){
-        System.out.println("bora deletar");
         roomService.delteById(id);
         return ResponseEntity.ok().build();
     }
 
-
-
-
-
-
-
-
+    @DeleteMapping(value = "/dltallsure0-0")
+    public ResponseEntity<Void> deleteAll(){
+        roomService.deleteAll();
+        return ResponseEntity.ok().build();
+    }
 
 
 }

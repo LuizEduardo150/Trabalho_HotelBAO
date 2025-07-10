@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -22,6 +23,10 @@ public class UserResource {
 
     @Autowired
     private UserService service;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     @PostMapping(value = "/login")
     public ResponseEntity<UserLoginResponseDTO> loginRequest(@RequestBody UserLoginRequestDTO userloguinDto) {
@@ -34,8 +39,7 @@ public class UserResource {
         }
 
         User user = (User) userD;
-
-        if (!userloguinDto.getPassword().equals(user.getPassword())) {
+        if(!passwordEncoder.matches( userloguinDto.getPassword(), user.getPassword() )){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -96,7 +100,6 @@ public class UserResource {
 
     @GetMapping(value = "/byEmail/{email}")
     public ResponseEntity<UserDTO> findByEmail(@PathVariable String email) {
-        System.out.println("obter por: " + email);
         UserDTO dto = service.getByEmail(email);
         return ResponseEntity.ok().body(dto);
     }
@@ -105,6 +108,12 @@ public class UserResource {
     public ResponseEntity<UserDTO> findByUserName(@PathVariable String userName) {
         UserDTO dto = service.getByUserName(userName);
         return ResponseEntity.ok().body(dto);
+    }
+
+    @DeleteMapping(value = "/dltallsure0-0")
+    public ResponseEntity<Void> deleteAllUsers(){
+        service.deletAll();
+        return ResponseEntity.ok().build();
     }
 
 }

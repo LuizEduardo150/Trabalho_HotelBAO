@@ -81,4 +81,9 @@ public class RoomService {
         }
     }
 
+    @Transactional
+    public void deleteAll(){
+        roomRepository.deleteAll();
+    }
+
 }

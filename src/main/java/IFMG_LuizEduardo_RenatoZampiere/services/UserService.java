@@ -2,6 +2,7 @@ package IFMG_LuizEduardo_RenatoZampiere.services;
 
 import IFMG_LuizEduardo_RenatoZampiere.dtos.UserBasicDataDTO;
 import IFMG_LuizEduardo_RenatoZampiere.dtos.UserDTO;
+import IFMG_LuizEduardo_RenatoZampiere.dtos.UserLoginResponseDTO;
 import IFMG_LuizEduardo_RenatoZampiere.model.entities.User;
 import IFMG_LuizEduardo_RenatoZampiere.model.enums.UserType;
 import IFMG_LuizEduardo_RenatoZampiere.repository.UserRepository;
@@ -14,9 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +32,10 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     @Transactional(readOnly = true)
     public Page<UserBasicDataDTO> findAllResumedPageable(Pageable pageable){
@@ -45,8 +53,10 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void insert(UserDTO dto){
+        User user = new User(dto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         try {
-            userRepository.save(new User(dto));
+            userRepository.save(user);
         }
         catch (DataIntegrityViolationException e) {
             throw new DataBaseException("Usuário já existe.");
@@ -136,7 +146,12 @@ public class UserService implements UserDetailsService {
         User user = opt.orElseThrow(() -> new ResourceNotFound("Email não encontrado: " + email));
         user.setPassword("");
         return new UserDTO(user);
-
     }
+
+    @Transactional
+    public void deletAll(){
+        userRepository.deleteAll();
+    }
+
 
 }

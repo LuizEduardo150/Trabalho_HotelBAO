@@ -82,4 +82,16 @@ public class StaysDTO {
     public void setTotalCost(BigDecimal totalCost) {
         this.totalCost = totalCost;
     }
+
+    @Override
+    public String toString() {
+        return "StaysDTO{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", roomId=" + roomId +
+                ", startStay=" + startStay +
+                ", endStay=" + endStay +
+                ", totalCost=" + totalCost +
+                '}';
+    }
 }

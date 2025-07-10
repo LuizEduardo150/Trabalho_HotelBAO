@@ -7,6 +7,7 @@ import IFMG_LuizEduardo_RenatoZampiere.model.entities.Stays;
 import IFMG_LuizEduardo_RenatoZampiere.model.entities.User;
 import IFMG_LuizEduardo_RenatoZampiere.projections.StaysDetailedWithoutUserDataProjection;
 import IFMG_LuizEduardo_RenatoZampiere.projections.StaysUserDetailedProjection;
+import IFMG_LuizEduardo_RenatoZampiere.repository.RoomRepository;
 import IFMG_LuizEduardo_RenatoZampiere.repository.StaysRepository;
 import IFMG_LuizEduardo_RenatoZampiere.services.exceptions.DataBaseException;
 import IFMG_LuizEduardo_RenatoZampiere.services.exceptions.ResourceNotFound;
@@ -16,7 +17,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +30,9 @@ public class StaysService {
 
     @Autowired
     private StaysRepository staysRepository;
+
+    @Autowired
+    private RoomRepository roomRepository;
 
     @Transactional(readOnly = true)
     public List<StaysDTO> findAll(){
@@ -101,28 +109,67 @@ public class StaysService {
 
     @Transactional
     public void insert(StaysDTO dto){
+        // Condicao ilegal: inicio dps do fim ou inicio antes da data atual
+        if( dto.getStartStay().isAfter(dto.getEndStay()) || dto.getStartStay().isBefore(LocalDate.now()))
+            throw new DataBaseException("Datas inválidas para reserva");
+
+        BigDecimal price = roomRepository.getRoomPriceById(dto.getRoomId());
+
+        if (price == null)
+            throw new DataBaseException("Quarto nao encontrado");
+
+        // Calcular custo total
+        long days = ChronoUnit.DAYS.between(dto.getStartStay(), dto.getEndStay());
+        BigDecimal total = price.multiply(BigDecimal.valueOf(days));
+        dto.setTotalCost(total);
+
+        // Verificar Colisão:
+        List<Long> lista = staysRepository.getRoomStaysIdBetweenDates(dto.getRoomId(), dto.getStartStay(), dto.getEndStay());
+
+        if(!lista.isEmpty())
+            throw new DataBaseException("Colisão de Datas!");
 
         try {
             staysRepository.save(new Stays(dto));
-
         } catch (DataIntegrityViolationException e) {
-
             System.out.println("Falha ao adicionar estadia, verifique os tipos de dado");
         } catch (Exception e) {
-
             System.out.println(e);
         }
 
     }
 
+
     @Transactional
     public void update(Long id, StaysDTO dto){
+        /*
+        * Por escolha, decidi que pode ser alterado apenas a data de início e fim. Quarto e clientes n podem ser alterados
+        * */
+        List<Long> lista = staysRepository.getRoomStaysIdBetweenDates(dto.getRoomId(), dto.getStartStay(), dto.getEndStay());
+
+        if(!lista.isEmpty()){ // colisão
+            for(Long id_i : lista){
+                if (id != id_i){ // Só pode colidir consigo mesmo
+                    throw new DataBaseException("Datas Dolidem !");
+                }
+            }
+        }
+
+        BigDecimal price = roomRepository.getRoomPriceById(dto.getRoomId());
+
+        if (price == null)
+            throw new DataBaseException("Quarto nao encontrado");
+
+        // Calcular custo total
+        long days = ChronoUnit.DAYS.between(dto.getStartStay(), dto.getEndStay());
+        BigDecimal total = price.multiply(BigDecimal.valueOf(days));
+        dto.setTotalCost(total);
 
         try {
             Stays stays = staysRepository.getReferenceById(id);
             stays.setStartStay(dto.getStartStay());
             stays.setEndStay(dto.getEndStay());
-            stays.setTotalCost(dto.getTotalCost());
+            stays.setTotalCost(total);
         } catch (EntityNotFoundException e){
             throw new DataBaseException("Não existe estadia cadastrada com o ID: " + id);
         }
@@ -173,5 +220,13 @@ public class StaysService {
 
         return dtoList;
     }
+
+
+    @Transactional
+    public void deleAllStays(){
+        staysRepository.deleteAll();
+    }
+
+
 
 }

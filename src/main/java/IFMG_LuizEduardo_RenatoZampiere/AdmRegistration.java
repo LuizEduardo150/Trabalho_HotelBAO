@@ -1,11 +1,14 @@
 package IFMG_LuizEduardo_RenatoZampiere;
 
+import IFMG_LuizEduardo_RenatoZampiere.model.entities.User;
 import IFMG_LuizEduardo_RenatoZampiere.model.enums.UserType;
 import org.springframework.jdbc.datasource.init.ScriptStatementFailedException;
 
-import java.io.Console;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import IFMG_LuizEduardo_RenatoZampiere.utils.InputOutputPers;
 
@@ -23,59 +26,55 @@ public class AdmRegistration {
         String user = "postgres";
         String password = "root";
 
+        String sql = """
+            SELECT id, address, address_number, district, email, password, phone, real_name, registration_date, user_name, user_type
+            FROM public.user_table;
+           """;
+
+        List<User> lista = new ArrayList<>();
         Connection conn = null;
-        String sql = "INSERT INTO user_table( " +
-                "address, address_number, district, email, password, phone, real_name, registration_date, user_name, user_type) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement pstmt = null;
 
         try {
             conn = DriverManager.getConnection(url, user, password);
-            if (conn != null) {
-                console.print("Conexão estabelecida com sucesso!");
-            } else {
-                console.print("Falha na conexão.");
+            pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+
+            while (rs.next()) {
+                // Exemplo: acessando dados por nome da coluna
+                User userData = new User();
+
+                userData.setId(rs.getLong("id"));
+                userData.setRealName(rs.getString("real_name"));
+                userData.setUserName(rs.getString("user_name"));
+                lista.add(userData);
             }
 
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-
-            String rua = console.input(">> Rua e Bairro: ");
-            pstmt.setString(1, rua);
-
-            String numero = console.input(">> Número da residência: ");
-            pstmt.setString(2, numero);
-
-            String cidade = console.input(">> Cidade: ");
-            pstmt.setString(3, cidade);
-
-            String email = console.input(">> e-mail: ");
-            pstmt.setString(4, email);
-
-            String senha = console.input(">> senha: ");
-            pstmt.setString(5, senha);
-
-            String tel = console.input(">> Telefone: ");
-            pstmt.setString(6, tel);
-
-            String nome = console.input(">> Nome real: ");
-            pstmt.setString(7, nome);
-
-            String username = console.input(">> User name (usado para loguin): ");
-            pstmt.setString(9, username);
-
-            pstmt.setString(10, UserType.ADMIN.getValue());
-            pstmt.setDate(8, Date.valueOf(LocalDate.now()));
-
-            int linhas = pstmt.executeUpdate();
-            console.print("Inserção realizada. Linhas afetadas: " + linhas);
-
-        }
-        catch (SQLException e) {
-            console.print("Erro ao conectar: " + e.getMessage());
+        } catch (SQLException e) {
             System.exit(1);
         }
-        catch (ScriptStatementFailedException e){
-            console.print("Erro no código sql");
-            System.exit(0);
+
+        int i = 0;
+        for(User useri : lista){
+            System.out.println("Indice: "+ i + "  nome real: " + useri.getRealName() + "username" + useri.getUsername());
+            i++;
         }
+
+        String id = console.input("Digite o indice da lista, do usuário que se tornará ADM:");
+        int id_l = Integer.parseInt(id);
+
+
+        sql = "UPDATE public.user_table SET user_type = " +  "'" + UserType.ADMIN.getValue().toLowerCase() + "'" + " WHERE id = " + lista.get(id_l).getId();
+        System.out.println(sql);
+
+        try {
+            pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+        }catch (SQLException e){
+            console.print(e.toString());
+        }
+
+
     }
 }

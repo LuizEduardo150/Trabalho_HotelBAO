@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,6 +94,20 @@ public interface StaysRepository extends JpaRepository <Stays, Long> {
     """)
     public List<StaysDetailedWithoutUserDataProjection> getStaysDetailedWithoutUserData(Long client_id);
 
+
+    @Query(nativeQuery = true, value = """
+        SELECT
+            id
+        FROM
+            public.stays_table
+        WHERE
+            room_id = :room_id
+            AND (
+                start_stay BETWEEN :start AND :end
+            OR
+                end_stay BETWEEN :start AND :end );
+    """)
+    public List<Long> getRoomStaysIdBetweenDates(Long room_id, LocalDate start, LocalDate end);
 
 
 }
